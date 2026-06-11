@@ -1,0 +1,7 @@
+# Obsidian plugin runtime data — holds your personal pinned paths, never commit
+data.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+node_modules/
