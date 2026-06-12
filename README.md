@@ -1,1 +1,54 @@
-IyBTdGFyIFBpbnMKCiFbU3RhciBQaW5zIHByZXZpZXddKGFzc2V0cy9zdGFyLXBpbnMtcHJldmlldy5wbmcpCgo+IEFuIFtPYnNpZGlhbl0oaHR0cHM6Ly9vYnNpZGlhbi5tZCkgcGx1Z2luIHRoYXQgdHVybnMgeW91ciBtb3N0LXVzZWQgbm90ZXMgaW50byAqKkFyYy1zdHlsZSB0aWxlcyoqIHBpbm5lZCBhdCB0aGUgdG9wIG9mIHRoZSBmaWxlIGV4cGxvcmVyLgoKU3RhciBhIGZpbGUgc3RyYWlnaHQgZnJvbSBpdHMgaGVhZGVyIGFuZCBpdCBhcHBlYXJzIGFzIGEgY29tcGFjdCwgaWNvbi1kcml2ZW4gdGlsZSBhYm92ZSB5b3VyIGZpbGUgdHJlZSDigJQgb25lIGNsaWNrIGF3YXksIGFsd2F5cyBpbiB2aWV3LiBSZW9yZGVyIHRpbGVzIGJ5IGRyYWdnaW5nLCByaWdodC1jbGljayB0byBtYW5hZ2UgdGhlbSwgYW5kIGtlZXAgZXZlcnl0aGluZyBpbiBzeW5jIGFzIGZpbGVzIGFyZSByZW5hbWVkIG9yIG1vdmVkLgoKIVtWZXJzaW9uXShodHRwczovL2ltZy5zaGllbGRzLmlvL2JhZGdlL3ZlcnNpb24tMS4wLjAtZDM5YTY3KQohW09ic2lkaWFuXShodHRwczovL2ltZy5zaGllbGRzLmlvL2JhZGdlL09ic2lkaWFuLTEuNC4wJTJCLTdjM2FlZCkKIVtMaWNlbnNlXShodHRwczovL2ltZy5zaGllbGRzLmlvL2JhZGdlL2xpY2Vuc2UtTUlULWdyZWVuKQoKLS0tCgojIyBGZWF0dXJlcwoKLSAqKlN0YXIgZnJvbSB0aGUgaGVhZGVyKiogLS0tIGEgc3RhciBidXR0b24gaXMgYWRkZWQgdG8gZXZlcnkgZmlsZSB2aWV3J3MgaGVhZGVyIGJhci4gQ2xpY2sgaXQgdG8gcGluIG9yIHVucGluIHRoZSBjdXJyZW50IGZpbGUuCi0gKipBcmMtc3R5bGUgdGlsZSBncmlkKiogLS0tIHBpbm5lZCBmaWxlcyByZW5kZXIgYXMgdGlsZXMgYXQgdGhlIHZlcnkgdG9wIG9mIHRoZSBmaWxlIGV4cGxvcmVyLCBhYm92ZSB0aGUgZmlsZSB0cmVlLgotICoqRHJhZyAmIGRyb3AgcmVvcmRlcmluZyoqIC0tLSByZWFycmFuZ2UgdGlsZXMgZnJlZWx5OyBkcm9wIGludG8gdGhlIGVtcHR5IGdhcCB0byBzZW5kIGEgdGlsZSB0byB0aGUgZW5kLgotICoqSWNvbml6ZSBpbnRlZ3JhdGlvbioqIC0tLSBpZiB5b3UgdXNlIHRoZSBbSWNvbml6ZV0oaHR0cHM6Ly9naXRodWIuY29tL0Zsb3JpYW5Xb2Vsa2kvb2JzaWRpYW4taWNvbi1mb2xkZXIpIHBsdWdpbiwgZWFjaCB0aWxlIHNob3dzIHRoZSBpY29uIHlvdSBhc3NpZ25lZCB0byB0aGF0IGZpbGUgKEx1Y2lkZSwgRm9udCBBd2Vzb21lLCBlbW9qaSwgYW5kIG90aGVyIHBhY2tzIGFyZSBzdXBwb3J0ZWQpLiBGaWxlcyB3aXRob3V0IGFuIGljb24gZmFsbCBiYWNrIHRvIGEgY2xlYW4gbW9ub2dyYW0uCi0gKipDb21tYW5kICYgaG90a2V5IHN1cHBvcnQqKiAtLS0gYmluZCAqIlBpbiAvIHVucGluIGN1cnJlbnQgZmlsZSIqIHRvIGEgaG90a2V5IGZvciBrZXlib2FyZC1vbmx5IHBpbm5pbmcuCi0gKipSaWdodC1jbGljayBhY3Rpb25zKiogLS0tIHVucGluIGEgdGlsZSBvciBvcGVuIHRoZSBmaWxlIGluIGEgbmV3IHRhYiBmcm9tIGl0cyBjb250ZXh0IG1lbnUuCi0gKipTdGF5cyBjb25zaXN0ZW50KiogLS0tIHBpbnMgZm9sbG93IGZpbGVzIHdoZW4gdGhleSdyZSByZW5hbWVkIGFuZCBhcmUgY2xlYW5lZCB1cCBhdXRvbWF0aWNhbGx5IHdoZW4gZmlsZXMgYXJlIGRlbGV0ZWQuCi0gKipXb3JrcyBiZXlvbmQgTWFya2Rvd24qKiAtLS0gYW55IGZpbGUgdmlldyB0aGF0IHN1cHBvcnRzIGhlYWRlciBhY3Rpb25zIChNYXJrZG93biwgQ2FudmFzLCBCYXNlcywg4oCYKSBjYW4gYmUgcGlubmVkLgoKIyMgSW5zdGFsbGF0aW9uCgojIyMgTWFudWFsCgoxLiBEb3dubG9hZCBgbWFpbi5qc2AsIGBtYW5pZmVzdC5qc29uYCwgYW5kIGBzdHlsZXMuY3NzYCBmcm9tIHRoaXMgcmVwb3NpdG9yeS4KMi4gQ29weSB0aGVtIGludG8geW91ciB2YXVsdCBhdCBgLm9ic2lkaWFuL3BsdWdpbnMvc3Rhci1waW5zL2AuCjMuIFJlbG9hZCBPYnNpZGlhbiwgdGhlbiBlbmFibGUgKipTdGFyIFBpbnMqKiB1bmRlciAqKlNldHRpbmdzIOKGkiBDb21tdW5pdHkgcGx1Z2lucyoqLgoKPiBUaXA6IHRoZSBmb2xkZXIgbmFtZSBtdXN0IGJlIGBzdGFyLXBpbnNgIChtYXRjaGluZyB0aGUgYGlkYCBpbiBgbWFuaWZlc3QuanNvbmApLgoKIyMgVXNhZ2UKCjEuIE9wZW4gYW55IG5vdGUuCjIuIENsaWNrIHRoZSAqKuKYhSBzdGFyKiogaWNvbiBpbiB0aGUgZmlsZSdzIGhlYWRlciB0byBwaW4gaXQg4oCUIGEgdGlsZSBhcHBlYXJzIGF0IHRoZSB0b3Agb2YgdGhlIGZpbGUgZXhwbG9yZXIuCjMuICoqQ2xpY2sqKiBhIHRpbGUgdG8gb3BlbiB0aGUgZmlsZSAoQ3RybC/ijKItY2xpY2sgdG8gb3BlbiBpbiBhIG5ldyB0YWIpLgo0LiAqKkRyYWcqKiB0aWxlcyB0byByZW9yZGVyIHRoZW0uCjUuICoqUmlnaHQtY2xpY2sqKiBhIHRpbGUgdG8gKlVucGluKiBvciAqT3BlbiBpbiBuZXcgdGFiKi4KClRvIHVucGluLCBjbGljayB0aGUgc3RhciBpbiB0aGUgaGVhZGVyIGFnYWluLCB1c2UgdGhlIHRpbGUncyBjb250ZXh0IG1lbnUsIG9yIHJ1biB0aGUgKiJQaW4gLyB1bnBpbiBjdXJyZW50IGZpbGUiKiBjb21tYW5kLgoKIyMgQ29tcGF0aWJpbGl0eQoKLSBSZXF1aXJlcyBPYnNpZGlhbiAqKjEuNC4wKiogb3IgbmV3ZXIuCi0gV29ya3Mgb24gKipkZXNrdG9wIGFuZCBtb2JpbGUqKiAoYGlzRGVza3RvcE9ubHk6IGZhbHNlYCkuCi0gKipPcHRpb25hbDoqKiBbSWNvbml6ZV0oaHR0cHM6Ly9naXRodWIuY29tL0Zsb3JpYW5Xb2Vsa2kvb2JzaWRpYW4taWNvbi1mb2xkZXIpIGZvciBwZXItZmlsZSB0aWxlIGljb25zLiBOb3QgcmVxdWlyZWQg4oCUIFN0YXIgUGlucyB3b3JrcyBmaW5lIHdpdGhvdXQgaXQuCgojIyBMaWNlbnNlCgpbTUlUXShMSUNFTlNFKSDCqSAyMDI2IMWgaW1vbiBaZWxlbmthCg==
+# Star Pins
+
+![Star Pins preview](assets/star-pins-preview.png)
+
+> An [Obsidian](https://obsidian.md) plugin that turns your most-used notes into **Arc-style tiles** pinned at the top of the file explorer.
+
+Star a file straight from its header and it appears as a compact, icon-driven tile above your file tree — one click away, always in view. Reorder tiles by dragging, right-click to manage them, and keep everything in sync as files are renamed or moved.
+
+![Version](https://img.shields.io/badge/version-1.0.0-d39a67)
+![Obsidian](https://img.shields.io/badge/Obsidian-1.4.0%2B-7c3aed)
+![License](https://img.shields.io/badge/license-MIT-green)
+
+---
+
+## Features
+
+- **Star from the header** — a star button is added to every file view's header bar. Click it to pin or unpin the current file.
+- **Arc-style tile grid** — pinned files render as tiles at the very top of the file explorer, above the file tree.
+- **Drag & drop reordering** — rearrange tiles freely; drop into the empty gap to send a tile to the end.
+- **Iconize integration** — if you use the [Iconize](https://github.com/FlorianWoelki/obsidian-icon-folder) plugin, each tile shows the icon you assigned to that file (Lucide, Font Awesome, emoji, and other packs are supported). Files without an icon fall back to a clean monogram.
+- **Command & hotkey support** — bind *"Pin / unpin current file"* to a hotkey for keyboard-only pinning.
+- **Right-click actions** — unpin a tile or open the file in a new tab from its context menu.
+- **Stays consistent** — pins follow files when they're renamed and are cleaned up automatically when files are deleted.
+- **Works beyond Markdown** — any file view that supports header actions (Markdown, Canvas, Bases, …) can be pinned.
+
+## Installation
+
+### Manual
+
+1. Download `main.js`, `manifest.json`, and `styles.css` from this repository.
+2. Copy them into your vault at `.obsidian/plugins/star-pins/`.
+3. Reload Obsidian, then enable **Star Pins** under **Settings → Community plugins**.
+
+> Tip: the folder name must be `star-pins` (matching the `id` in `manifest.json`).
+
+## Usage
+
+1. Open any note.
+2. Click the **★ star** icon in the file's header to pin it — a tile appears at the top of the file explorer.
+3. **Click** a tile to open the file (Ctrl/⌘-click to open in a new tab).
+4. **Drag** tiles to reorder them.
+5. **Right-click** a tile to *Unpin* or *Open in new tab*.
+
+To unpin, click the star in the header again, use the tile's context menu, or run the *"Pin / unpin current file"* command.
+
+## Compatibility
+
+- Requires Obsidian **1.4.0** or newer.
+- Works on **desktop and mobile** (`isDesktopOnly: false`).
+- **Optional:** [Iconize](https://github.com/FlorianWoelki/obsidian-icon-folder) for per-file tile icons. Not required — Star Pins works fine without it.
+
+## License
+
+[MIT](LICENSE) © 2026 Šimon Zelenka
