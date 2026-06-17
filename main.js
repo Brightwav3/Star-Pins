@@ -78,37 +78,43 @@ module.exports = class StarPinsPlugin extends Plugin {
 
   /* ---------- data ---------- */
 
-  isPinned(path) {
-    return !!path && this.data.pins.includes(path);
+  // A pin entry is either a file-path string or a view descriptor object
+  // { key, viewType, state, label, icon }. The key uniquely identifies it.
+  pinKeyOf(entry) { return typeof entry === "string" ? entry : (entry && entry.key); }
+
+  isPinned(key) {
+    return !!key && this.data.pins.some((e) => this.pinKeyOf(e) === key);
   }
 
-  async togglePin(path) {
-    if (!path) return;
-    const i = this.data.pins.indexOf(path);
-    if (i === -1) this.data.pins.push(path);
+  // `entry` may be a path string or a descriptor object.
+  async togglePin(entry) {
+    const key = this.pinKeyOf(entry);
+    if (!key) return;
+    const i = this.data.pins.findIndex((e) => this.pinKeyOf(e) === key);
+    if (i === -1) this.data.pins.push(entry);
     else this.data.pins.splice(i, 1);
     await this.persistAndRender();
   }
 
-  async unpin(path) {
-    const i = this.data.pins.indexOf(path);
+  async unpin(key) {
+    const i = this.data.pins.findIndex((e) => this.pinKeyOf(e) === key);
     if (i !== -1) {
       this.data.pins.splice(i, 1);
       await this.persistAndRender();
     }
   }
 
-  // Reorder: drop `fromPath` next to `toPath` (toPath null = move to the end).
-  async movePin(fromPath, toPath, placeAfter) {
-    if (!fromPath || fromPath === toPath) return;
+  // Reorder: drop `fromKey` next to `toKey` (toKey null = move to the end).
+  async movePin(fromKey, toKey, placeAfter) {
+    if (!fromKey || fromKey === toKey) return;
     const pins = this.data.pins;
-    const from = pins.indexOf(fromPath);
+    const from = pins.findIndex((e) => this.pinKeyOf(e) === fromKey);
     if (from === -1) return;
-    pins.splice(from, 1);
-    let to = toPath == null ? pins.length : pins.indexOf(toPath);
+    const [moved] = pins.splice(from, 1);
+    let to = toKey == null ? pins.length : pins.findIndex((e) => this.pinKeyOf(e) === toKey);
     if (to === -1) to = pins.length;
     if (placeAfter) to += 1;
-    pins.splice(to, 0, fromPath);
+    pins.splice(to, 0, moved);
     await this.persistAndRender();
   }
 
@@ -127,30 +133,37 @@ module.exports = class StarPinsPlugin extends Plugin {
   }
 
   refreshHeaders() {
-    // Any open view that is backed by a file and supports header actions
-    // (markdown, bases, canvas, …) gets a star button.
+    // Any open view that is backed by a file (markdown, bases, canvas, …) OR
+    // exposes a `starPin` descriptor (custom views) gets a star button.
     this.app.workspace.iterateAllLeaves((leaf) => {
       const view = leaf && leaf.view;
-      if (view && view.file && typeof view.addAction === "function") {
+      if (view && typeof view.addAction === "function" && (view.file || view.starPin)) {
         this.ensureStarButton(view);
       }
     });
   }
 
-  ensureStarButton(view) {
-    const path = view.file ? view.file.path : null;
+  // Current pin target for a view: its file path, or its starPin descriptor.
+  pinTargetOf(view) {
+    if (view.file) return view.file.path;
+    if (view.starPin) return view.starPin;
+    return null;
+  }
 
+  ensureStarButton(view) {
     if (!view.__starPinEl) {
-      const el = view.addAction("star", "Pin file", () => {
-        if (view.file) this.togglePin(view.file.path);
+      const el = view.addAction("star", "Pin", () => {
+        const target = this.pinTargetOf(view);
+        if (target) this.togglePin(target);
       });
       el.addClass("star-pin-action");
       view.__starPinEl = el;
     }
 
-    const pinned = this.isPinned(path);
+    const key = this.pinKeyOf(this.pinTargetOf(view));
+    const pinned = this.isPinned(key);
     view.__starPinEl.toggleClass("is-pinned", pinned);
-    view.__starPinEl.setAttr("aria-label", pinned ? "Unpin file" : "Pin file");
+    view.__starPinEl.setAttr("aria-label", pinned ? "Unpin" : "Pin");
   }
 
   /* ---------- Iconize integration ---------- */
@@ -249,13 +262,13 @@ module.exports = class StarPinsPlugin extends Plugin {
   // Grid-level drop target: dropping in the empty gap moves the tile to the end.
   attachGridDnd() {
     this.gridEl.addEventListener("dragover", (e) => {
-      if (this._dragPath) e.preventDefault();
+      if (this._dragKey) e.preventDefault();
     });
     this.gridEl.addEventListener("drop", (e) => {
-      if (!this._dragPath) return;
+      if (!this._dragKey) return;
       e.preventDefault();
-      const from = this._dragPath;
-      this._dragPath = null;
+      const from = this._dragKey;
+      this._dragKey = null;
       this.movePin(from, null, false);
     });
   }
@@ -291,7 +304,11 @@ module.exports = class StarPinsPlugin extends Plugin {
     // Only rebuild the tiles when the pins (or their icons) actually changed.
     // Otherwise an active-leaf-change on click would replace the tile mid-click.
     const key = this.data.pins
-      .map((p) => p + "|" + (this.getIconizeIcon(p) || ""))
+      .map((e) =>
+        typeof e === "string"
+          ? e + "|" + (this.getIconizeIcon(e) || "")
+          : e.key + "|" + (e.icon || "")
+      )
       .join("~");
     if (key === this._renderKey && this.gridEl.childElementCount === this.data.pins.length) {
       return;
@@ -299,35 +316,33 @@ module.exports = class StarPinsPlugin extends Plugin {
     this._renderKey = key;
     this.gridEl.empty();
 
-    this.data.pins.forEach((path) => {
-      const file = this.app.vault.getAbstractFileByPath(path);
-      const name = file ? file.basename || file.name : path.split("/").pop();
-      const label = (name || "?").replace(/\.[^.]+$/, "");
+    this.data.pins.forEach((entry) => {
+      const r = this.resolvePin(entry);
 
       const tile = this.gridEl.createDiv("star-pin-tile");
-      tile.setAttr("aria-label", label);
-      if (!file) tile.addClass("is-missing");
+      tile.setAttr("aria-label", r.label);
+      if (r.missing) tile.addClass("is-missing");
 
-      // Drag & drop reordering.
+      // Drag & drop reordering (by pin key).
       tile.setAttr("draggable", "true");
       tile.addEventListener("dragstart", (e) => {
-        this._dragPath = path;
+        this._dragKey = r.key;
         e.dataTransfer.effectAllowed = "move";
-        e.dataTransfer.setData("text/plain", path);
+        e.dataTransfer.setData("text/plain", r.key);
         tile.addClass("is-dragging");
       });
       tile.addEventListener("dragend", () => {
-        this._dragPath = null;
+        this._dragKey = null;
         tile.removeClass("is-dragging");
         tile.removeClass("drop-before");
         tile.removeClass("drop-after");
       });
       tile.addEventListener("dragover", (e) => {
-        if (!this._dragPath || this._dragPath === path) return;
+        if (!this._dragKey || this._dragKey === r.key) return;
         e.preventDefault();
         e.dataTransfer.dropEffect = "move";
-        const r = tile.getBoundingClientRect();
-        const after = e.clientX > r.left + r.width / 2;
+        const rect = tile.getBoundingClientRect();
+        const after = e.clientX > rect.left + rect.width / 2;
         tile.toggleClass("drop-after", after);
         tile.toggleClass("drop-before", !after);
       });
@@ -336,52 +351,90 @@ module.exports = class StarPinsPlugin extends Plugin {
         tile.removeClass("drop-after");
       });
       tile.addEventListener("drop", (e) => {
-        if (!this._dragPath) return;
+        if (!this._dragKey) return;
         e.preventDefault();
         e.stopPropagation();
-        const r = tile.getBoundingClientRect();
-        const after = e.clientX > r.left + r.width / 2;
-        const from = this._dragPath;
-        this._dragPath = null;
+        const rect = tile.getBoundingClientRect();
+        const after = e.clientX > rect.left + rect.width / 2;
+        const from = this._dragKey;
+        this._dragKey = null;
         tile.removeClass("drop-before");
         tile.removeClass("drop-after");
-        this.movePin(from, path, after);
+        this.movePin(from, r.key, after);
       });
 
       const iconWrap = tile.createDiv("star-pin-icon");
-      const iconName = file ? this.getIconizeIcon(file.path) : null;
-      if (!this.applyIcon(iconWrap, iconName)) {
+      if (r.lucide) {
+        setIcon(iconWrap, r.lucide);
+        if (iconWrap.childElementCount === 0) {
+          iconWrap.addClass("is-mono");
+          iconWrap.setText((r.label.trim()[0] || "?").toUpperCase());
+        }
+      } else if (!this.applyIcon(iconWrap, r.iconName)) {
         iconWrap.addClass("is-mono");
-        iconWrap.setText(label.trim().slice(0, 1).toUpperCase() || "?");
+        iconWrap.setText((r.label.trim()[0] || "?").toUpperCase());
       }
 
-      tile.addEventListener("click", (evt) => {
-        if (!file) {
-          new Notice("Pinned file no longer exists.");
-          return;
-        }
-        this.app.workspace.getLeaf(evt.ctrlKey || evt.metaKey).openFile(file);
+      tile.addEventListener("click", (evt) => r.open(evt.ctrlKey || evt.metaKey));
+
+      // Middle-click opens the pin in a new tab (Arc/browser convention).
+      tile.addEventListener("auxclick", (evt) => {
+        if (evt.button !== 1) return;
+        evt.preventDefault();
+        if (r.canOpenNew) r.open(true);
       });
 
       tile.addEventListener("contextmenu", (evt) => {
         evt.preventDefault();
         const menu = new Menu();
         menu.addItem((item) =>
-          item
-            .setTitle("Unpin")
-            .setIcon("star-off")
-            .onClick(() => this.unpin(path))
+          item.setTitle("Unpin").setIcon("star-off").onClick(() => this.unpin(r.key))
         );
-        if (file) {
+        if (r.canOpenNew) {
           menu.addItem((item) =>
-            item
-              .setTitle("Open in new tab")
-              .setIcon("file-plus")
-              .onClick(() => this.app.workspace.getLeaf(true).openFile(file))
+            item.setTitle("Open in new tab").setIcon("file-plus").onClick(() => r.open(true))
           );
         }
         menu.showAtMouseEvent(evt);
       });
     });
+  }
+
+  // Resolve a pin entry into render data: label, icon, open() handler.
+  resolvePin(entry) {
+    if (typeof entry === "string") {
+      const file = this.app.vault.getAbstractFileByPath(entry);
+      const name = file ? file.basename || file.name : entry.split("/").pop();
+      const label = (name || "?").replace(/\.[^.]+$/, "");
+      return {
+        key: entry,
+        label,
+        missing: !file,
+        lucide: null,
+        iconName: file ? this.getIconizeIcon(file.path) : null,
+        canOpenNew: !!file,
+        open: (newLeaf) => {
+          if (!file) { new Notice("Pinned file no longer exists."); return; }
+          this.app.workspace.getLeaf(newLeaf).openFile(file);
+        },
+      };
+    }
+    // View descriptor: { key, viewType, state, label, icon }
+    return {
+      key: entry.key,
+      label: entry.label || entry.key,
+      missing: false,
+      lucide: entry.icon || "panel-left",
+      iconName: null,
+      canOpenNew: true,
+      open: (newLeaf) => this.openViewPin(entry, newLeaf),
+    };
+  }
+
+  async openViewPin(entry, newLeaf) {
+    const existing = this.app.workspace.getLeavesOfType(entry.viewType)[0];
+    const leaf = existing && !newLeaf ? existing : this.app.workspace.getLeaf(newLeaf || false);
+    await leaf.setViewState({ type: entry.viewType, state: entry.state || {}, active: true });
+    this.app.workspace.revealLeaf(leaf);
   }
 };
